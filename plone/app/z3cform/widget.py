@@ -134,15 +134,21 @@ class BaseWidget(Widget):
 
 
 @implementer_only(IDateWidget)
-class DateWidget(BaseWidget, HTMLInputWidget):
+class DateWidget(BaseWidget, z3cform_TextWidget):
     """Date widget for z3c.form."""
 
-    _base = InputWidget
+    _base_type = "date"
     _converter = DateWidgetConverter
     _formater = 'date'
 
     pattern = 'pickadate'
     pattern_options = BaseWidget.pattern_options.copy()
+
+    def _base(self, **kw):
+        return InputWidget(
+            type=self._base_type,
+            **kw
+        )
 
     def _base_args(self):
         """Method which will calculate _base class arguments.
@@ -201,7 +207,7 @@ class DateWidget(BaseWidget, HTMLInputWidget):
 
 
 @implementer_only(IDatetimeWidget)
-class DatetimeWidget(DateWidget, HTMLInputWidget):
+class DatetimeWidget(DateWidget):
     """Datetime widget for z3c.form.
 
     :param default_timezone: A Olson DB/pytz timezone identifier or a callback
@@ -210,12 +216,19 @@ class DatetimeWidget(DateWidget, HTMLInputWidget):
 
     """
 
+    _base_type = "datetime-local"
     _converter = DatetimeWidgetConverter
     _formater = 'dateTime'
 
     pattern_options = DateWidget.pattern_options.copy()
 
     default_timezone = None
+
+    def _base(self, **kw):
+        return InputWidget(
+            type=self._base_type,
+            **kw
+        )
 
     def _base_args(self):
         """Method which will calculate _base class arguments.
