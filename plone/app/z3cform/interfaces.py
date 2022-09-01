@@ -42,6 +42,14 @@ class IDatetimeWidget(ITextWidget):
     """Marker interface for the DatetimeWidget."""
 
 
+class IEmailField(ITextWidget):
+    """Marker interface for the DateField."""
+
+
+class IEmailWidget(ITextWidget):
+    """Marker interface for the EmailField."""
+
+
 class ISelectWidget(IBaseSelectWidget):
     """Marker interface for the SelectWidget."""
 

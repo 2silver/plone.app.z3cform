@@ -25,6 +25,7 @@ from plone.app.z3cform.converters import DateWidgetConverter
 from plone.app.z3cform.interfaces import IAjaxSelectWidget
 from plone.app.z3cform.interfaces import IDatetimeWidget
 from plone.app.z3cform.interfaces import IDateWidget
+from plone.app.z3cform.interfaces import IEmailWidget
 from plone.app.z3cform.interfaces import ILinkWidget
 from plone.app.z3cform.interfaces import IPloneFormLayer
 from plone.app.z3cform.interfaces import IQueryStringWidget
@@ -245,6 +246,36 @@ class DatetimeWidget(DateWidget, HTMLInputWidget):
             args['pattern_options'])
 
         return args
+
+
+@implementer_only(IEmailWidget)
+class EmailWidget(BaseWidget, z3cform_TextWidget):
+    """Email widget for z3c.form."""
+
+    _base_type = 'email'
+
+    pattern = ''
+    pattern_options = BaseWidget.pattern_options.copy()
+
+    def _base(self, **kw):
+        return InputWidget(
+            type=self._base_type,
+            **kw
+        )
+
+    def render(self):
+        """Render widget.
+
+        :returns: Widget's HTML.
+        :rtype: string
+        """
+        if self.mode != 'display':
+            return super(EmailWidget, self).render()
+
+        if not self.value:
+            return ''
+
+        return self.value
 
 
 @implementer_only(ISelectWidget)
@@ -876,6 +907,12 @@ def DateFieldWidget(field, request):
 @implementer(IFieldWidget)
 def DatetimeFieldWidget(field, request):
     return FieldWidget(field, DatetimeWidget(request))
+
+
+@implementer(IFieldWidget)
+def EmailFieldWidget(field, request):
+    widget = FieldWidget(field, EmailWidget(request))
+    return widget
 
 
 @implementer(IFieldWidget)

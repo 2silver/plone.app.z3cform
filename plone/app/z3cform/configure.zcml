@@ -202,6 +202,19 @@
            for=".interfaces.IDatetimeField
                 plone.app.z3cform.interfaces.IPloneFormLayer" />
 
+
+    <class class=".widget.EmailWidget">
+        <require permission="zope.Public"
+            interface=".interfaces.IEmailWidget" />
+    </class>
+    <class class="zope.schema._field.TextLine">
+        <implements interface=".interfaces.IEmailField" />
+    </class>
+    <adapter factory=".widget.EmailFieldWidget"
+        for=".interfaces.IEmailField
+           plone.app.z3cform.interfaces.IPloneFormLayer" />
+
+
   <adapter factory=".widget.RelatedItemsFieldWidget"
            for="z3c.relationfield.interfaces.IRelationChoice
                 plone.app.z3cform.interfaces.IPloneFormLayer" />
